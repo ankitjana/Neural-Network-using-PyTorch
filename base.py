@@ -34,6 +34,10 @@ class Network(nn.Module):
 import torch.nn.functional as F
 from torchvision import datasets, transforms
 # Transform to normalize the data
+# Converts the image into numbers, that are understandable by the system. It separates the image into three color channels (separate images):
+# red, green & blue. Then it converts the pixels of each image to the brightness of their color between 0 and 255.
+# These values are then scaled down to a range between 0 and 1
+# Normalizes the tensor with a mean and standard deviation which goes as the two parameters respectively
 transform = transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.5,),(0.5,))])
 # Training Data
 trainset = datasets.MNIST('~/.pytorch/MNIST_data/', download=True, train=True, transform=transform)
@@ -44,6 +48,7 @@ valloader = torch.utils.data.DataLoader(valset, batch_size=64, shuffle=True)
 # See Data
 dataiter = iter(trainloader)
 images, labels = dataiter.next()
+print("Training Data: ")
 print(images.shape)
 print(labels.shape)
 
@@ -65,6 +70,8 @@ model = nn.Sequential(nn.Linear(784,128),
                       nn.ReLU(),
                       nn.Linear(64,10),
                       nn.LogSoftmax(dim=1))
+print("Model: ")
+print(model)
 
 # Loss
 criterion = nn.NLLLoss()
